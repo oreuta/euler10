@@ -7,9 +7,9 @@ import (
 )
 
 func main() {
-	n, err := conf.Getconf()
+	n, err := conf.Getconf(10)
 	if err != nil {
-		log.Fatal("Bad config")
+		log.Fatalf("Bad config: %v", err)
 	}
-	fmt.Printf("Hello euler config: %d\n", n)
+	fmt.Printf("Hello euler %v config: %d\n", erat(n), n)
 }
