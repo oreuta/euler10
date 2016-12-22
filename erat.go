@@ -14,7 +14,7 @@ func erat(n int) ([]int, int) {
 			s[j] = true
 		}
 		i++
-		for i < n && s[i] { // find next prime
+		for i < n && s[i] { // go to the next prime
 			i++
 		}
 		pnum++
