@@ -1,40 +1,35 @@
 package main
 
 //Sieve of Eratosthenes - The Simplest Algorithm
-func erat(n int) []int {
+func erat(n int) ([]int, int) {
 
-	type Number struct {
-		val  int  // a number value
-		comp bool // if it's composite (false = prime)
-	}
-
-	// Init []Sieve
-	s := make([]Number, n)
-	for i := 0; i < n; i++ {
-		s[i].val = i
-	}
-	s[0].comp, s[1].comp = true, true // 0 and 1 are not primes
+	// All numbers are set to be prime (false)
+	s := make([]bool, n)
+	s[0], s[1] = true, true // 0 and 1 are composite
 
 	i := 2      // first prime
 	pnum := 0   // number of primes
 	for i < n { // sieve main loop
 		for j := i * i; j < n; j += i {
-			s[j].comp = true
+			s[j] = true
 		}
 		i++
-		for i < n && s[i].comp { // find next prime
+		for i < n && s[i] { // find next prime
 			i++
 		}
 		pnum++
 	}
 
-	// Pick up primes from []Sieve to []int
+	// Pick up primes from []bool to []int
+	// and calculate a sum
 	p := make([]int, pnum)
+	sum := 0
 	for i, j := 0, 0; i < n; i++ {
-		if !s[i].comp {
-			p[j] = s[i].val
+		if !s[i] {
+			p[j] = i
+			sum += i
 			j++
 		}
 	}
-	return p
+	return p, sum
 }
