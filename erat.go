@@ -16,7 +16,8 @@ func erat(n int) []int {
 	s[0].f, s[1].f = true, true // 0 and 1 are not primes
 
 	i := 2      // first prime
-	for i < n { // main loop
+	pnum := 0   // number of primes
+	for i < n { // sieve main loop
 		for j := i * i; j < n; j += i {
 			s[j].f = true
 		}
@@ -24,13 +25,15 @@ func erat(n int) []int {
 		for i < n && s[i].f { // find next prime
 			i++
 		}
+		pnum++
 	}
 
 	// Pick up primes from []Sieve to []int
-	p := make([]int, 0)
-	for i := 0; i < n; i++ {
+	p := make([]int, pnum)
+	for i, j := 0, 0; i < n; i++ {
 		if !s[i].f {
-			p = append(p, s[i].i)
+			p[j] = s[i].i
+			j++
 		}
 	}
 	return p
