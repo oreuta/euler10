@@ -7,7 +7,7 @@ import (
 func main() {
 	fmt.Println("Hello euler 10!")
 	n := 2000000
-	primes, sum := erat(n)
+	sum, primes := erat(n, false)
 	//
 	//sum is 142913828922 (for n = 2000000)
 	//You are the 228112th person to have solved this problem.

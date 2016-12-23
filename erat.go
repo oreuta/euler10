@@ -1,13 +1,14 @@
 package main
 
 //Sieve of Eratosthenes - The Simplest Algorithm
-func erat(n int) ([]int, int) {
+func erat(n int, list bool) (int, []int) {
 
 	// All numbers are set to be prime (false)
 	s := make([]bool, n)
 	s[0], s[1] = true, true // 0 and 1 are composite
 
 	i := 2      // first prime
+	sum := i    // sum of primes
 	pnum := 0   // number of primes
 	for i < n { // sieve main loop
 		for j := i * i; j < n; j += i {
@@ -17,19 +18,26 @@ func erat(n int) ([]int, int) {
 		for i < n && s[i] { // go to the next prime
 			i++
 		}
+		sum += i
 		pnum++
 	}
 
+	if list {
+		return sum, make_prime_list(s, pnum)
+	}
+
+	return sum, nil
+
+}
+
+func make_prime_list(s []bool, pnum int) []int {
 	// Pick up primes from []bool to []int
-	// and calculate a sum
 	p := make([]int, pnum)
-	sum := 0
-	for i, j := 0, 0; i < n; i++ {
+	for i, j := 0, 0; i < len(s); i++ {
 		if !s[i] {
 			p[j] = i
-			sum += i
 			j++
 		}
 	}
-	return p, sum
+	return p
 }
