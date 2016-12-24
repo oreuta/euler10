@@ -9,7 +9,7 @@ func erat(n int, list bool) (int, []int) {
 
 	i := 2    // first prime
 	sum := i  // sum of primes
-	pnum := 0 // number of primes
+	pnum := 1 // number of primes
 
 	for i < n { // sieve main loop
 
