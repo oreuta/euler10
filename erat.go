@@ -1,8 +1,52 @@
 package main
 
+import (
+	"math"
+)
+
+//https://habrahabr.ru/post/133037/
+func erat2(n int, list bool) (int, []int) {
+	s := make([]bool, n)    // Sieve: false-prime true-composite
+	s[0], s[1] = true, true // 0 and 1 are composite
+
+	i := 2 // first prime
+
+	kmax := int(math.Sqrt(float64(n)))
+
+	for i <= kmax { // sieve main loop
+
+		for j := i * i; j < n; j += i {
+			s[j] = true
+		}
+
+		i++
+		for i <= kmax && s[i] {
+			i++
+		}
+	}
+
+	sum := 0
+	pnum := 0
+
+	for k := 2; k < n; k++ {
+		if !s[k] {
+			sum += k
+			pnum++
+		}
+	}
+
+	// prepare list of primes if needed
+	if list {
+		return sum, make_prime_list(s, pnum)
+	}
+
+	return sum, nil
+
+}
+
 //Sieve of Eratosthenes - The Simplest Algorithm
 //Parallel version 1 (fixed g-rout number)
-func eratp(n int, list bool) (int, []int) {
+func erat1(n int, list bool) (int, []int) {
 
 	// All numbers are set to be prime (false)
 	s := make([]bool, n)
@@ -67,7 +111,7 @@ func rmcomp(s []bool, i int, c chan int) {
 }
 
 //Sieve of Eratosthenes - The Simplest Algorithm
-func erat(n int, list bool) (int, []int) {
+func erat0(n int, list bool) (int, []int) {
 
 	// All numbers are set to be prime (false)
 	s := make([]bool, n)
