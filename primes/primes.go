@@ -1,3 +1,7 @@
+//
+//sum is 142913828922 (for n = 2000000)
+//You are the 228112th person to have solved this problem.
+//
 package primes
 
 import (
