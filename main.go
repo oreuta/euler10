@@ -1,49 +1,115 @@
 package main
 
 import (
-	"fmt"
-	"time"
+	"encoding/json"
+	"errors"
+	"log"
+	"net/http"
+	"strings"
 
-	"euler10/primes"
+	"golang.org/x/net/context"
+
+	"github.com/go-kit/kit/endpoint"
+	httptransport "github.com/go-kit/kit/transport/http"
 )
 
-func main() {
-	fmt.Println("Hello euler 10!")
-	n := 2000000
-	list := false
-
-	fmt.Printf("exp: [2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97]")
-	fmt.Println("\n-----------------")
-
-	start := time.Now()
-	sum, p := primes.Erat0(int64(n), list)
-	elapsed := time.Since(start)
-	pres(sum, elapsed, p, list)
-	fmt.Println("==============")
-
-	start = time.Now()
-	sum, p = primes.Erat1(int64(n), list)
-	elapsed = time.Since(start)
-	pres(sum, elapsed, p, list)
-	fmt.Println("==============")
-
-	start = time.Now()
-	sum, p = primes.Erat2(int64(n), list)
-	elapsed = time.Since(start)
-	pres(sum, elapsed, p, list)
-	fmt.Println("==============")
-
-	start = time.Now()
-	sum, p = primes.Primesum(int64(n), list)
-	elapsed = time.Since(start)
-	pres(sum, elapsed, p, list)
-
+// StringService provides operations on strings.
+type StringService interface {
+	Uppercase(string) (string, error)
+	Count(string) int
 }
 
-func pres(sum int64, elapsed time.Duration, p []int64, list bool) {
-	if list {
-		fmt.Printf("act: %v\n", p)
+type stringService struct{}
+
+func (stringService) Uppercase(s string) (string, error) {
+	if s == "" {
+		return "", ErrEmpty
 	}
-	fmt.Printf("Sum: %v ", sum)
-	fmt.Printf("Dur: %dns\n", elapsed.Nanoseconds())
+	return strings.ToUpper(s), nil
 }
+
+func (stringService) Count(s string) int {
+	return len(s)
+}
+
+func main() {
+	ctx := context.Background()
+	svc := stringService{}
+
+	uppercaseHandler := httptransport.NewServer(
+		ctx,
+		makeUppercaseEndpoint(svc),
+		decodeUppercaseRequest,
+		encodeResponse,
+	)
+
+	countHandler := httptransport.NewServer(
+		ctx,
+		makeCountEndpoint(svc),
+		decodeCountRequest,
+		encodeResponse,
+	)
+
+	http.Handle("/uppercase", uppercaseHandler)
+	http.Handle("/count", countHandler)
+	log.Fatal(http.ListenAndServe(":22222", nil))
+}
+
+func makeUppercaseEndpoint(svc StringService) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(uppercaseRequest)
+		v, err := svc.Uppercase(req.S)
+		if err != nil {
+			return uppercaseResponse{v, err.Error()}, nil
+		}
+		return uppercaseResponse{v, ""}, nil
+	}
+}
+
+func makeCountEndpoint(svc StringService) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(countRequest)
+		v := svc.Count(req.S)
+		return countResponse{v}, nil
+	}
+}
+
+func decodeUppercaseRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	var request uppercaseRequest
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+		return nil, err
+	}
+	return request, nil
+}
+
+func decodeCountRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	var request countRequest
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+		return nil, err
+	}
+	return request, nil
+}
+
+func encodeResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
+	return json.NewEncoder(w).Encode(response)
+}
+
+type uppercaseRequest struct {
+	S string `json:"s"`
+}
+
+type uppercaseResponse struct {
+	V   string `json:"v"`
+	Err string `json:"err,omitempty"` // errors don't define JSON marshaling
+}
+
+type countRequest struct {
+	S string `json:"s"`
+}
+
+type countResponse struct {
+	V int `json:"v"`
+}
+
+// ErrEmpty is returned when an input string is empty.
+var ErrEmpty = errors.New("empty string")
