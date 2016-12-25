@@ -1,11 +1,11 @@
-package main
+package primes
 
 import (
 	"math"
 )
 
 //https://habrahabr.ru/post/133037/
-func erat2(n int, list bool) (int, []int) {
+func Erat2(n int, list bool) (int, []int) {
 	s := make([]bool, n)    // Sieve: false-prime true-composite
 	s[0], s[1] = true, true // 0 and 1 are composite
 
@@ -46,7 +46,7 @@ func erat2(n int, list bool) (int, []int) {
 
 //Sieve of Eratosthenes - The Simplest Algorithm
 //Parallel version 1 (fixed g-rout number)
-func erat1(n int, list bool) (int, []int) {
+func Erat1(n int, list bool) (int, []int) {
 
 	// All numbers are set to be prime (false)
 	s := make([]bool, n)
@@ -111,7 +111,7 @@ func rmcomp(s []bool, i int, c chan int) {
 }
 
 //Sieve of Eratosthenes - The Simplest Algorithm
-func erat0(n int, list bool) (int, []int) {
+func Erat0(n int, list bool) (int, []int) {
 
 	// All numbers are set to be prime (false)
 	s := make([]bool, n)

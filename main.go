@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"time"
+
+	"euler10/primes"
 )
 
 func main() {
@@ -18,17 +20,17 @@ func main() {
 	fmt.Println("\n-----------------")
 
 	ts := time.Now()
-	sum, p := erat0(n, list)
+	sum, p := primes.Erat0(n, list)
 	te := time.Now()
 	pres(sum, ts, te, p, list)
 	fmt.Println("==============")
 	ts = time.Now()
-	sum, p = erat1(n, list)
+	sum, p = primes.Erat1(n, list)
 	te = time.Now()
 	pres(sum, ts, te, p, list)
 	fmt.Println("==============")
 	ts = time.Now()
-	sum, p = erat2(n, list)
+	sum, p = primes.Erat2(n, list)
 	te = time.Now()
 	pres(sum, ts, te, p, list)
 
