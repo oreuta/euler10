@@ -1,21 +1,27 @@
-//
-//sum is 142913828922 (for n = 2000000)
-//You are the 228112th person to have solved this problem.
-//
+// Package primes provides functions to find sum
+// of all primes lesser then predefined number n
+// and optionaly get all of them as a slice.
+// For n = 2000000 sum is 142913828922
+// This is a 228112th solusion this problem on
+// https://projecteuler.net/
 package primes
 
 import (
 	"math"
 )
 
-//https://habrahabr.ru/post/133037/
-func Erat2(n int, list bool) (int, []int) {
+// Default implementation of
+var Primesum func(int64, bool) (int64, []int64) = Erat2
+
+// https://habrahabr.ru/post/133037/
+func Erat2(n int64, list bool) (int64, []int64) {
+	i := int64(2)           // first prime
+	sum := int64(0)         // sum of primes
+	pnum := int64(0)        // number of primes
 	s := make([]bool, n)    // Sieve: false-prime true-composite
 	s[0], s[1] = true, true // 0 and 1 are composite
 
-	i := 2 // first prime
-
-	kmax := int(math.Sqrt(float64(n)))
+	kmax := int64(math.Sqrt(float64(n)))
 
 	for i <= kmax { // sieve main loop
 
@@ -29,10 +35,7 @@ func Erat2(n int, list bool) (int, []int) {
 		}
 	}
 
-	sum := 0
-	pnum := 0
-
-	for k := 2; k < n; k++ {
+	for k := int64(2); k < n; k++ {
 		if !s[k] {
 			sum += k
 			pnum++
@@ -50,15 +53,12 @@ func Erat2(n int, list bool) (int, []int) {
 
 //Sieve of Eratosthenes - The Simplest Algorithm
 //Parallel version 1 (fixed g-rout number)
-func Erat1(n int, list bool) (int, []int) {
-
-	// All numbers are set to be prime (false)
-	s := make([]bool, n)
+func Erat1(n int64, list bool) (int64, []int64) {
+	var i int64 = 0         // first prime
+	var sum int64 = 0       // sum of primes
+	var pnum int64 = 0      // number of primes
+	s := make([]bool, n)    // Sieve: false-prime true-composite
 	s[0], s[1] = true, true // 0 and 1 are composite
-
-	i := 0    // first prime
-	sum := 0  // sum of primes
-	pnum := 0 // number of primes
 
 	ch := make(chan int, 4)
 
@@ -115,15 +115,12 @@ func rmcomp(s []bool, i int, c chan int) {
 }
 
 //Sieve of Eratosthenes - The Simplest Algorithm
-func Erat0(n int, list bool) (int, []int) {
-
-	// All numbers are set to be prime (false)
-	s := make([]bool, n)
+func Erat0(n int64, list bool) (int64, []int64) {
+	var i int64 = 2         // first prime
+	var sum int64 = i       // sum of primes
+	var pnum int64 = 1      // number of primes
+	s := make([]bool, n)    // Sieve: false-prime true-composite
 	s[0], s[1] = true, true // 0 and 1 are composite
-
-	i := 2    // first prime
-	sum := i  // sum of primes
-	pnum := 1 // number of primes
 
 	for i < n { // sieve main loop
 
@@ -151,10 +148,10 @@ func Erat0(n int, list bool) (int, []int) {
 
 }
 
-func make_prime_list(s []bool, pnum int) []int {
+func make_prime_list(s []bool, pnum int64) []int64 {
 	// Pick up primes from []bool to []int
-	p := make([]int, pnum)
-	for i, j := 0, 0; i < len(s); i++ {
+	p := make([]int64, pnum)
+	for i, j := int64(0), int64(0); i < int64(len(s)); i++ {
 		if !s[i] {
 			p[j] = i
 			j++
