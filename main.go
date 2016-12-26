@@ -28,7 +28,7 @@ func main() {
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-	page, _ := ioutil.ReadFile("./views/index.html")
+	page, _ := ioutil.ReadFile("./ui/index.html")
 	fmt.Fprint(w, string(page))
 	return
 }

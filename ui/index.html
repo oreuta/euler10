@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<style>
+		.top-heading  	{
+					padding: 21px 0;
+					font-weight: bold;
+					font-size: 20px;
+					background-color: rgb(224,235,245);
+		    		font-family: Sans-serif;		      
+		      	}
+		#submit	{
+					background-color: rgb(55,94,171);
+					color: white;
+				}
+	</style>
+	
+</head>
+<body>
+<!-- from: https://golang.org/ -->
+<!-- <div class="top-heading" id="heading-wide"><a href="/">The Go Programming Language</a></div> -->
+	<h1 class="top-heading">Sum of primes</h1>
+	<table>
+	<form action="/sum" method="post">
+		<tr><td>Upper limit:</td>
+		    <td><input type="text" placeholder="int64" name="n"></td>
+			<td><input id="submit" type="submit" value="calculate"></td>
+		</tr>
+	</form>
+		<tr><td>Result:</td>
+		    <td><input id="sum" type="text"></td>
+		</tr>
+	</table>
+</body>
+</html>
