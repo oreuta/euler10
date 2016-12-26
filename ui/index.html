@@ -7,26 +7,7 @@
 	<title>Sum of primes</title>
 	<link rel="stylesheet" href="main.css">
 	<script src="jquery-3.1.1.min.js"></script>
-	<script>
-		$(document).ready(function() {
-			$('#btnCalc').click(function() {
-				var sum = $('#sum');
-				sum.html("Waiting for reply...");
-				var n = $('#n').val();
-				$.ajax({
-					url: 'http://localhost:5050/sum',
-					method: 'post',
-					data: 
-					'{"n": '+n+', "list": false}',
-					dataType: 'json',
-					contentType: 'application/json',
-					success: function(data) {
-						sum.html(data.sum);
-					},
-				});
-			});
-		});
-	</script>
+	<script src="ws.js"></script>
 </head>
 <body>
 	<h1>Sum of primes</h1>
