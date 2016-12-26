@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -13,7 +11,7 @@ import (
 
 func main() {
 	ctx := context.Background()
-	svc := primeService{}
+	svc := PrimeService{}
 
 	primeSumHandler := httptransport.NewServer(
 		ctx,
@@ -22,13 +20,8 @@ func main() {
 		encodeResponse,
 	)
 
-	http.HandleFunc("/", indexHandler)
+	fs := http.FileServer(http.Dir("ui"))
+	http.Handle("/", fs)
 	http.Handle("/sum", primeSumHandler)
 	log.Fatal(http.ListenAndServe(":5050", nil))
-}
-
-func indexHandler(w http.ResponseWriter, r *http.Request) {
-	page, _ := ioutil.ReadFile("./ui/index.html")
-	fmt.Fprint(w, string(page))
-	return
 }

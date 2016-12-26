@@ -1,0 +1,11 @@
+h1		{
+			padding: 21px 0;
+			font-weight: bold;
+			font-size: 20px;
+			background-color: rgb(224,235,245);
+	  		font-family: Sans-serif;		      
+		}
+#btnCalc {
+			background-color: rgb(55,94,171);
+			color: white;
+		}

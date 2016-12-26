@@ -7,9 +7,9 @@ type PrimeFinder interface {
 	PrimeSum(int64, bool) (int64, []int64)
 }
 
-type primeService struct{}
+type PrimeService struct{}
 
-func (primeService) PrimeSum(n int64, list bool) (int64, []int64) {
+func (PrimeService) PrimeSum(n int64, list bool) (int64, []int64) {
 	sum, primes := primes.PrimeSum(n, list)
 	return sum, primes
 }

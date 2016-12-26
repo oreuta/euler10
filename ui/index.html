@@ -1,38 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <!-- https://www.youtube.com/watch?v=SjLJ8Dyuywg -->
 
 <html lang="en">
 <head>
-	<style>
-		.top-heading  	{
-					padding: 21px 0;
-					font-weight: bold;
-					font-size: 20px;
-					background-color: rgb(224,235,245);
-		    		font-family: Sans-serif;		      
-		      	}
-		#submit	{
-					background-color: rgb(55,94,171);
-					color: white;
-				}
-	</style>
-	<script src="jquery-ui.min.js"></script>
+	<meta charset="utf-8">
+	<title>Sum of primes</title>
+	<link rel="stylesheet" href="main.css">
+	<script src="jquery-3.1.1.min.js"></script>
 	<script>
 		$(document).ready(function() {
-			alert('started');
 			$('#btnCalc').click(function() {
+				var sum = $('#sum');
+				sum.html("Waiting for reply...");
 				var n = $('#n').val();
-				var sum = $('#sum').val();
-				alert('try to send');
 				$.ajax({
-					url: 'localhost:5050/sum',
+					url: 'http://localhost:5050/sum',
 					method: 'post',
-					data: {n: n, list: false},
+					data: 
+					'{"n": '+n+', "list": false}',
 					dataType: 'json',
+					contentType: 'application/json',
 					success: function(data) {
-						alert('received');
-						//sum.html(data.sum);
-						sum.html('Hiiiiiiii!');
+						sum.html(data.sum);
 					},
 				});
 			});
@@ -40,9 +29,7 @@
 	</script>
 </head>
 <body>
-<!-- from: https://golang.org/ -->
-<!-- <div class="top-heading" id="heading-wide"><a href="/">The Go Programming Language</a></div> -->
-	<h1 class="top-heading">Sum of primes</h1>
+	<h1>Sum of primes</h1>
 	<table>
 		<tr><td>Upper limit:</td>
 		    <td><input id="n" type="text" placeholder="int64"></td>

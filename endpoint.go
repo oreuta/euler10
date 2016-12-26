@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/go-kit/kit/endpoint"
@@ -10,8 +11,11 @@ import (
 
 func makePrimeSumEndpoint(pf PrimeFinder) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		log.Printf("endpoint start")
 		req := request.(sumRequest)
+		log.Printf("req = %v\n", req)
 		sum, primes := pf.PrimeSum(req.N, req.List)
+		log.Printf("sum = %v\np = %v\n", sum, primes)
 		return sumResponse{sum, primes}, nil
 	}
 }
