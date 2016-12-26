@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"golang.org/x/net/context"
 
@@ -10,6 +11,10 @@ import (
 )
 
 func main() {
+	port := os.Getenv("PORT") // for heroku
+	if port == "" {
+		port = 8080
+	}
 	ctx := context.Background()
 	svc := PrimeService{}
 
@@ -23,5 +28,5 @@ func main() {
 	fs := http.FileServer(http.Dir("ui"))
 	http.Handle("/", fs)
 	http.Handle("/sum", primeSumHandler)
-	log.Fatal(http.ListenAndServe(":80", nil))
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
