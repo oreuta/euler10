@@ -13,7 +13,7 @@ import (
 func main() {
 	port := os.Getenv("PORT") // for heroku
 	if port == "" {
-		port = 8080
+		port = "8080"
 	}
 	ctx := context.Background()
 	svc := PrimeService{}
