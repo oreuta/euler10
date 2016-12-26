@@ -6,7 +6,7 @@ function initPage() {
 		sum.html("Waiting for reply...");
 		var n = $('#n').val();
 		$.ajax({
-			url: 'http://localhost:5050/sum',
+			url: '/sum',
 			method: 'post',
 			data: 
 				'{"n": '+n+', "list": false}',
