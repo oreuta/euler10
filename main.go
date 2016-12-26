@@ -23,5 +23,5 @@ func main() {
 	fs := http.FileServer(http.Dir("ui"))
 	http.Handle("/", fs)
 	http.Handle("/sum", primeSumHandler)
-	log.Fatal(http.ListenAndServe(":5050", nil))
+	log.Fatal(http.ListenAndServe(":80", nil))
 }
