@@ -11,7 +11,7 @@ import (
 )
 
 // Default implementation of
-var Primesum func(int64, bool) (int64, []int64) = Erat2
+var PrimeSum func(int64, bool) (int64, []int64) = Erat2
 
 // https://habrahabr.ru/post/133037/
 func Erat2(n int64, list bool) (int64, []int64) {
