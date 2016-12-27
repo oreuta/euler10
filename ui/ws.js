@@ -5,21 +5,31 @@ function initPage() {
 		var wait_mess = "Waiting for reply...";
 		var sum = $('#sum');
 		var etime = $('#etime');
+		var primes = $('#primes');
+		var list = $('#list').prop('checked');
 		var n = $('#n').val();
 		
 		sum.html(wait_mess);		
 		etime.html(wait_mess);
+		if (list) {
+			primes.html(wait_mess);
+		} else {
+			primes.html("");
+		}
 
 		$.ajax({
 			url: '/sum',
 			method: 'post',
 			data: 
-				'{"n": '+n+', "list": false}',
+				'{"n": '+n+', "list": '+list+'}',
 			dataType: 'json',
 			contentType: 'application/json',
 			success: function(data) {
 						sum.html(data.sum);
 						etime.html(data.etime);
+						if (data.primes) {
+							primes.html(data.primes);
+						}
 			},
 		});
 	});
