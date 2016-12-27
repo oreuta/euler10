@@ -1,11 +1,20 @@
-h1		{
-			padding: 21px 0;
-			font-weight: bold;
-			font-size: 20px;
-			background-color: rgb(224,235,245);
-	  		font-family: Sans-serif;		      
-		}
+h1 {
+	padding: 21px 0;
+	font-weight: bold;
+	font-size: 20px;
+	background-color: rgb(224,235,245);		      
+}
 #btnCalc {
-			background-color: rgb(55,94,171);
-			color: white;
-		}
+	background-color: rgb(55,94,171);
+	font-weight: bold;
+	color: white;
+}
+#sum {
+	background-color: rgb(224,235,245);
+}
+body {
+	font-family: Sans-serif;
+}
+.label {
+	font-weight: bold;
+}

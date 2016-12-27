@@ -12,12 +12,19 @@
 <body>
 	<h1>Sum of primes</h1>
 	<table>
-		<tr><td>Upper limit:</td>
-		    <td><input id="n" type="text" placeholder="int64"></td>
+		<tr><td class="label">Upper limit:</td>
+		    <td><input id="n" type="text" placeholder="uint64"></td>
 			<td><input id="btnCalc" type="button" value="Calculate"></td>
 		</tr>
-		<tr><td>Result:</td>
-		    <td><div id="sum"></div></td>
+		<tr><td class="label">Show primes:</td>
+		    <td><input id="list" type="checkbox"
+			title="WARNING: Too large output could be produced!"></div></td>
+		</tr>
+		<tr><td class="label">Sum:</td>
+		    <td><div id="sum">Nothing to show yet</div></td>
+		</tr>
+		<tr><td class="label">Elapsed time:</td>
+		    <td><div id="etime">Nothing to show yet</div></td>
 		</tr>
 	</table>
 </body>

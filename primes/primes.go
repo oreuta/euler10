@@ -11,17 +11,17 @@ import (
 )
 
 // Default implementation of
-var PrimeSum func(int64, bool) (int64, []int64) = Erat2
+var PrimeSum func(uint64, bool) (uint64, []uint64) = Erat2
 
 // https://habrahabr.ru/post/133037/
-func Erat2(n int64, list bool) (int64, []int64) {
-	i := int64(2)           // first prime
-	sum := int64(0)         // sum of primes
-	pnum := int64(0)        // number of primes
+func Erat2(n uint64, list bool) (uint64, []uint64) {
+	i := uint64(2)          // first prime
+	sum := uint64(0)        // sum of primes
+	pnum := uint64(0)       // number of primes
 	s := make([]bool, n)    // Sieve: false-prime true-composite
 	s[0], s[1] = true, true // 0 and 1 are composite
 
-	kmax := int64(math.Sqrt(float64(n)))
+	kmax := uint64(math.Sqrt(float64(n)))
 
 	for i <= kmax { // sieve main loop
 
@@ -35,7 +35,7 @@ func Erat2(n int64, list bool) (int64, []int64) {
 		}
 	}
 
-	for k := int64(2); k < n; k++ {
+	for k := uint64(2); k < n; k++ {
 		if !s[k] {
 			sum += k
 			pnum++
@@ -53,10 +53,10 @@ func Erat2(n int64, list bool) (int64, []int64) {
 
 //Sieve of Eratosthenes - The Simplest Algorithm
 //Parallel version 1 (fixed g-rout number)
-func Erat1(n int64, list bool) (int64, []int64) {
-	var i int64 = 0         // first prime
-	var sum int64 = 0       // sum of primes
-	var pnum int64 = 0      // number of primes
+func Erat1(n uint64, list bool) (uint64, []uint64) {
+	var i uint64 = 0        // first prime
+	var sum uint64 = 0      // sum of primes
+	var pnum uint64 = 0     // number of primes
 	s := make([]bool, n)    // Sieve: false-prime true-composite
 	s[0], s[1] = true, true // 0 and 1 are composite
 
@@ -115,10 +115,10 @@ func rmcomp(s []bool, i int, c chan int) {
 }
 
 //Sieve of Eratosthenes - The Simplest Algorithm
-func Erat0(n int64, list bool) (int64, []int64) {
-	var i int64 = 2         // first prime
-	var sum int64 = i       // sum of primes
-	var pnum int64 = 1      // number of primes
+func Erat0(n uint64, list bool) (uint64, []uint64) {
+	var i uint64 = 2        // first prime
+	var sum uint64 = i      // sum of primes
+	var pnum uint64 = 1     // number of primes
 	s := make([]bool, n)    // Sieve: false-prime true-composite
 	s[0], s[1] = true, true // 0 and 1 are composite
 
@@ -148,10 +148,10 @@ func Erat0(n int64, list bool) (int64, []int64) {
 
 }
 
-func make_prime_list(s []bool, pnum int64) []int64 {
+func make_prime_list(s []bool, pnum uint64) []uint64 {
 	// Pick up primes from []bool to []int
-	p := make([]int64, pnum)
-	for i, j := int64(0), int64(0); i < int64(len(s)); i++ {
+	p := make([]uint64, pnum)
+	for i, j := uint64(0), uint64(0); i < uint64(len(s)); i++ {
 		if !s[i] {
 			p[j] = i
 			j++
