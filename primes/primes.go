@@ -149,7 +149,7 @@ func Erat0(n uint64, list bool) (uint64, []uint64) {
 }
 
 func make_prime_list(s []bool, pnum uint64) []uint64 {
-	// Pick up primes from []bool to []int
+	// Pick up primes from []bool to []uint64
 	p := make([]uint64, pnum)
 	for i, j := uint64(0), uint64(0); i < uint64(len(s)); i++ {
 		if !s[i] {

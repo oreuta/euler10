@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strings"
+	str "strings"
 	"time"
 
 	"github.com/go-kit/kit/endpoint"
@@ -24,7 +24,7 @@ func makePrimeSumEndpoint(pf PrimeFinder) endpoint.Endpoint {
 		return sumResponse{
 			sum,
 			etime.String(),
-			strings.TrimRight(strings.TrimLeft(fmt.Sprintf("%v", primes), "["), "]")}, nil
+			str.TrimRight(str.TrimLeft(fmt.Sprintf("%v", primes), "["), "]")}, nil
 	}
 }
 
