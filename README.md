@@ -1,3 +1,4 @@
 # euler10
-https://projecteuler.net/problem=10 - Go implementation
-Deployed to: https://euler10.herokuapp.com/
+Go solution of *Summation of primes* [problem](https://projecteuler.net/problem=10)
+
+Deployed to [Heroku](https://euler10.herokuapp.com/)
