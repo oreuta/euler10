@@ -7,7 +7,7 @@
 package primes
 
 import (
-	"errors"
+	_ "errors"
 	"math"
 )
 
