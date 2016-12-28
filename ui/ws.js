@@ -25,6 +25,12 @@ function initPage() {
 			dataType: 'json',
 			contentType: 'application/json',
 			success: function(data) {
+						if (data.error) {
+							sum.html(data.error);
+							etime.html("");
+							primes.html("");
+							return;							
+						}
 						sum.html(data.sum);
 						etime.html(data.etime);
 						if (data.primes) {

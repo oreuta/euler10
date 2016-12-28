@@ -16,7 +16,10 @@ func makePrimeSumEndpoint(pf PrimeFinder) endpoint.Endpoint {
 		req := request.(sumRequest)
 		log.Printf("req = %v\n", req)
 		start := time.Now()
-		sum, primes := pf.PrimeSum(req.N, req.List)
+		sum, primes, err := pf.PrimeSum(req.N, req.List)
+		if err != nil {
+			return sumError{"ERROR: " + err.Error()}, nil
+		}
 		etime := time.Since(start)
 		log.Printf("sum=%v\nt=%v\np=%v\n", sum, etime.String(), primes)
 		return sumResponse{
@@ -35,6 +38,10 @@ type sumResponse struct {
 	Sum    uint64   `json:"sum"`
 	ETime  string   `json:"etime"`
 	Primes []uint64 `json:"primes,omitempty"`
+}
+
+type sumError struct {
+	Err string `json:"error"`
 }
 
 func decodePrimeSumRequest(_ context.Context, r *http.Request) (interface{}, error) {

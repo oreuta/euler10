@@ -7,17 +7,19 @@
 package primes
 
 import (
+	"errors"
 	"math"
 )
 
-// Default implementation of
-var PrimeSum func(uint64, bool) (uint64, []uint64) = Erat2
+// Default implementation
+var PrimeSum func(uint64, bool) (uint64, []uint64, error) = Erat2
 
 // https://habrahabr.ru/post/133037/
-func Erat2(n uint64, list bool) (uint64, []uint64) {
-	i := uint64(2)          // first prime
-	sum := uint64(0)        // sum of primes
-	pnum := uint64(0)       // number of primes
+// 142913828922 - 19.0011ms
+func Erat2(n uint64, list bool) (uint64, []uint64, error) {
+	var i uint64 = 2        // first prime
+	var sum uint64 = 2      // sum of primes
+	var pnum uint64 = 1     // number of primes
 	s := make([]bool, n)    // Sieve: false-prime true-composite
 	s[0], s[1] = true, true // 0 and 1 are composite
 
@@ -41,19 +43,18 @@ func Erat2(n uint64, list bool) (uint64, []uint64) {
 			pnum++
 		}
 	}
-
 	// prepare list of primes if needed
 	if list {
-		return sum, make_prime_list(s, pnum)
+		return sum, make_prime_list(s, pnum), nil
 	}
 
-	return sum, nil
+	return sum, nil, nil
 
 }
 
 //Sieve of Eratosthenes - The Simplest Algorithm
 //Parallel version 1 (fixed g-rout number)
-func Erat1(n uint64, list bool) (uint64, []uint64) {
+func Erat1(n uint64, list bool) (uint64, []uint64, error) {
 	var i uint64 = 0        // first prime
 	var sum uint64 = 0      // sum of primes
 	var pnum uint64 = 0     // number of primes
@@ -100,10 +101,10 @@ func Erat1(n uint64, list bool) (uint64, []uint64) {
 
 	// prepare list of primes if needed
 	if list {
-		return sum, make_prime_list(s, pnum)
+		return sum, make_prime_list(s, pnum), nil
 	}
 
-	return sum, nil
+	return sum, nil, nil
 
 }
 
@@ -115,7 +116,7 @@ func rmcomp(s []bool, i int, c chan int) {
 }
 
 //Sieve of Eratosthenes - The Simplest Algorithm
-func Erat0(n uint64, list bool) (uint64, []uint64) {
+func Erat0(n uint64, list bool) (uint64, []uint64, error) {
 	var i uint64 = 2        // first prime
 	var sum uint64 = i      // sum of primes
 	var pnum uint64 = 1     // number of primes
@@ -141,10 +142,10 @@ func Erat0(n uint64, list bool) (uint64, []uint64) {
 
 	// prepare list of primes if needed
 	if list {
-		return sum, make_prime_list(s, pnum)
+		return sum, make_prime_list(s, pnum), nil
 	}
 
-	return sum, nil
+	return sum, nil, nil
 
 }
 
