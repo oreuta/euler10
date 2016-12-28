@@ -2,10 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
-	str "strings"
 	"time"
 
 	"github.com/go-kit/kit/endpoint"
@@ -24,7 +22,7 @@ func makePrimeSumEndpoint(pf PrimeFinder) endpoint.Endpoint {
 		return sumResponse{
 			sum,
 			etime.String(),
-			str.TrimRight(str.TrimLeft(fmt.Sprintf("%v", primes), "["), "]")}, nil
+			primes}, nil
 	}
 }
 
@@ -34,9 +32,9 @@ type sumRequest struct {
 }
 
 type sumResponse struct {
-	Sum    uint64 `json:"sum"`
-	ETime  string `json:"etime"`
-	Primes string `json:"primes,omitempty"`
+	Sum    uint64   `json:"sum"`
+	ETime  string   `json:"etime"`
+	Primes []uint64 `json:"primes,omitempty"`
 }
 
 func decodePrimeSumRequest(_ context.Context, r *http.Request) (interface{}, error) {

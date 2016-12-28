@@ -28,7 +28,11 @@ function initPage() {
 						sum.html(data.sum);
 						etime.html(data.etime);
 						if (data.primes) {
-							primes.html(data.primes);
+							var str = '';
+							for(var p in data.primes) {
+    							str += data.primes[p] + '\t';
+							}
+							primes.html(str.slice(0, -1));
 						}
 			},
 		});
