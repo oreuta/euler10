@@ -39,6 +39,8 @@ function initPage() {
     							str += data.primes[p] + '\t';
 							}
 							primes.html(str.slice(0, -1));
+						} else {
+							primes.html("");
 						}
 			},
 		});

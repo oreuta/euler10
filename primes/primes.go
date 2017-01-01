@@ -28,6 +28,10 @@ var PrimeSum func(uint64, bool) (uint64, []uint64, error) = Erat2
 // https://habrahabr.ru/post/133037/
 // 142913828922 - 19.0011ms
 func Erat2(n uint64, list bool) (uint64, []uint64, error) {
+	if n < 2 {
+		return 0, []uint64{}, nil
+	}
+
 	var i uint64 = 2        // first prime
 	var sum uint64 = 0      // sum of primes
 	var pnum uint64 = 0     // number of primes
