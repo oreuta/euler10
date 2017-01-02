@@ -6,6 +6,7 @@ function initPage() {
 		var color_OK = "MediumSeaGreen";
 		var wait_mess = "Waiting for reply...";
 		var norepl_mess = "No meaningful reply"
+		var nothing_mess = "Nothing to show"
 		var sum = $('#sum');
 		var etime = $('#etime');
 		var primes = $('#primes');
@@ -34,7 +35,7 @@ function initPage() {
 							mess.css("color", color_error);
 							sum.html(norepl_mess);
 							etime.html(norepl_mess);
-							primes.html("");
+							primes.html(nothing_mess);
 							return;							
 						}
 						sum.html(data.sum);
@@ -46,7 +47,7 @@ function initPage() {
 							}
 							primes.html(str.slice(0, -1));
 						} else {
-							primes.html("");
+							primes.html(nothing_mess);
 						}
 						mess.html("OK");
 						mess.css("color", color_OK);
@@ -72,7 +73,7 @@ function initPage() {
 						mess.css("color", color_error);
 						sum.html(norepl_mess);
 						etime.html(norepl_mess);
-						primes.html("");
+						primes.html(nothing_mess);
     		},
 		});
 	});
