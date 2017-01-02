@@ -2,6 +2,8 @@ window.onload = initPage;
 
 function initPage() {
 	$('#btnCalc').click(function() {
+		var color_error = "Tomato";
+		var color_OK = "MediumSeaGreen";
 		var wait_mess = "Waiting for reply...";
 		var norepl_mess = "No meaningful reply"
 		var sum = $('#sum');
@@ -28,8 +30,10 @@ function initPage() {
 			contentType: 'application/json',
 			success: function(data) {
 						if (data.error) {
-							sum.html(data.error);
-							etime.html("");
+							mess.html(data.error);
+							mess.css("color", color_error);
+							sum.html(norepl_mess);
+							etime.html(norepl_mess);
 							primes.html("");
 							return;							
 						}
@@ -45,7 +49,7 @@ function initPage() {
 							primes.html("");
 						}
 						mess.html("OK");
-						mess.css("color", "MediumSeaGreen");
+						mess.css("color", color_OK);
 			},
 			error: function(jqXHR, exception) {
         				var msg = '';
@@ -65,9 +69,10 @@ function initPage() {
             				msg = 'Uncaught Error.\n' + jqXHR.responseText;
         				}
         				mess.html(msg);
-						mess.css("color", "Tomato");
+						mess.css("color", color_error);
 						sum.html(norepl_mess);
 						etime.html(norepl_mess);
+						primes.html("");
     		},
 		});
 	});
