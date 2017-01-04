@@ -7,7 +7,7 @@
 package primes
 
 import (
-	_ "errors"
+	"errors"
 	"math"
 )
 
@@ -23,13 +23,12 @@ type Params struct {
 }
 
 // Default implementation
-var PrimeSum func(uint64, bool) (uint64, []uint64, error) = Erat2
+var PrimeSum func(uint64, bool) (uint64, []uint64, error) = Erat3
 
-// https://habrahabr.ru/post/133037/
-// 142913828922 - 19.0011ms
-func Erat2(n uint64, list bool) (uint64, []uint64, error) {
+// Parallel sum calculation
+func Erat3(n uint64, list bool) (uint64, []uint64, error) {
 	if n < 2 {
-		return 0, []uint64{}, nil
+		return 0, []uint64{}, ErrBadRange
 	}
 
 	var i uint64 = 2        // first prime
@@ -50,11 +49,32 @@ func Erat2(n uint64, list bool) (uint64, []uint64, error) {
 		}
 	}
 
-	for k := uint64(2); k < n; k++ {
-		if !s[k] {
-			sum += k
-			pnum++
+	var rnum uint64 = 10 // Max # of goroutins
+	var sums chan uint64 = make(chan uint64, rnum)
+	var pnums chan uint64 = make(chan uint64, rnum)
+	var ran = n / uint64(rnum)
+	var imin, imax uint64
+	for r := uint64(1); r <= rnum; r++ {
+		imin, imax = imax, r*ran
+		if r == rnum {
+			imax = n
 		}
+		go func(s []bool) {
+			var psum, ppnum, k uint64
+			for k = 0; k < uint64(len(s)); k++ {
+				if !s[k] {
+					psum += k
+					ppnum++
+				}
+			}
+			sums <- psum
+			pnums <- ppnum
+		}(s[imin:imax])
+	}
+
+	for r := uint64(1); r <= rnum; r++ {
+		sum += <-sums
+		pnum += <-pnums
 	}
 
 	if list {
@@ -64,3 +84,5 @@ func Erat2(n uint64, list bool) (uint64, []uint64, error) {
 	return sum, nil, nil
 
 }
+
+var ErrBadRange error = errors.New("No primes in the range")
