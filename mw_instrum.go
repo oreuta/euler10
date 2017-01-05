@@ -13,7 +13,7 @@ type instrumentingMiddleware struct {
 	next           PrimeService
 }
 
-func (mw instrumentingMiddleware) PrimeSum(n uint64, lst bool, nr uint8) (sum uint64, primes []uint64, err error) {
+func (mw instrumentingMiddleware) PrimeSum(n uint64, lst bool, nr uint64) (sum uint64, primes []uint64, err error) {
 	defer func(begin time.Time) {
 		lvs := []string{"method", "PrimeSum", "error", fmt.Sprint(err != nil)}
 		mw.requestCount.With(lvs...).Add(1)

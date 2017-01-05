@@ -12,7 +12,7 @@ type loggingMiddleware struct {
 	next   PrimeService
 }
 
-func (mw loggingMiddleware) PrimeSum(n uint64, lst bool, nr uint8) (sum uint64, primes []uint64, err error) {
+func (mw loggingMiddleware) PrimeSum(n uint64, lst bool, nr uint64) (sum uint64, primes []uint64, err error) {
 	var plen int
 	var p string
 

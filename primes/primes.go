@@ -9,16 +9,17 @@ package primes
 import (
 	"errors"
 	"math"
+	"runtime"
 )
 
 // Default implementation for Summation of primes.
 // It gets n - an upper limit for primes in the sum,
 // lst - if list of primes has to be generated,
 // nr - number of goroutines used.
-var PrimeSum func(n uint64, lst bool, nr uint8) (sum uint64, primes []uint64, err error) = Erat3
+var PrimeSum func(n uint64, lst bool, nr uint64) (sum uint64, primes []uint64, err error) = Erat3
 
 // Parallel sum calculation
-func Erat3(n uint64, lst bool, nr uint8) (uint64, []uint64, error) {
+func Erat3(n uint64, lst bool, nr uint64) (uint64, []uint64, error) {
 	if n < 2 {
 		return 0, []uint64{}, ErrEmptyRange
 	}
@@ -43,11 +44,13 @@ func Erat3(n uint64, lst bool, nr uint8) (uint64, []uint64, error) {
 
 	var rnum uint64 // Max # of goroutins
 	if nr == 0 {
-		rnum = 3 // default for now...
+		rnum = uint64(runtime.NumCPU()) // default!
+	} else {
+		rnum = nr // user defined
 	}
 	var sums chan uint64 = make(chan uint64, rnum)
 	var pnums chan uint64 = make(chan uint64, rnum)
-	var ran = (n + 1) / uint64(rnum)
+	var ran = (n + 1) / rnum
 	var imin, imax uint64
 	for r := uint64(1); r <= rnum; r++ {
 		imin, imax = imax, r*ran

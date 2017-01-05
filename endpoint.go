@@ -28,7 +28,7 @@ func makePrimeSumEndpoint(ps PrimeService) endpoint.Endpoint {
 type sumRequest struct {
 	N   uint64 `json:"n"`
 	Lst bool   `json:"lst"`
-	Nr  uint8  `json:"nr"`
+	Nr  uint64 `json:"nr"`
 }
 
 type sumResponse struct {
