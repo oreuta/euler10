@@ -8,7 +8,7 @@ import (
 
 // https://habrahabr.ru/post/133037/
 // 142913828922 - 19.0011ms
-func Erat2(n uint64, lst bool, nr uint8) (uint64, []uint64, error) {
+func Erat2(n uint64, lst bool, nr uint64) (uint64, []uint64, error) {
 	if n < 2 {
 		return 0, []uint64{}, ErrEmptyRange
 	}
@@ -47,7 +47,7 @@ func Erat2(n uint64, lst bool, nr uint8) (uint64, []uint64, error) {
 }
 
 //Parallel version 1 (fixed g-rout number)
-func Erat1(n uint64, lst bool, nr uint8) (uint64, []uint64, error) {
+func Erat1(n uint64, lst bool, nr uint64) (uint64, []uint64, error) {
 	if n < 2 {
 		return 0, []uint64{}, ErrEmptyRange
 	}
@@ -113,7 +113,7 @@ func rmcomp(s []bool, i int, c chan int) {
 }
 
 //Sieve of Eratosthenes - The Simplest Algorithm
-func Erat0(n uint64, lst bool, nr uint8) (uint64, []uint64, error) {
+func Erat0(n uint64, lst bool, nr uint64) (uint64, []uint64, error) {
 	if n < 2 {
 		return 0, []uint64{}, ErrEmptyRange
 	}
