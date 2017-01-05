@@ -12,12 +12,16 @@
 	<h1>Summation of primes</h1>
 	<table>
 		<tr><td class="label">Upper limit:</td>
-		    <td><input id="n" type="text" placeholder="uint64"></td>
+		    <td><input id="n" type="text" placeholder="int64"></td>
 			<td><input id="btnCalc" type="button" value="Calculate"></td>
 		</tr>
+		<tr><td class="label">No. of goroutines:</td>
+		    <td><input id="nr" type="text" value="0"
+			title="0 - Default number; 1 - Main only"></td>
+		</tr>
 		<tr><td class="label">Show primes:</td>
-		    <td><input id="list" type="checkbox" 
-			title="WARNING: Too large output could be produced!"></div></td>
+		    <td><input id="lst" type="checkbox" 
+			title="WARNING: Too large output could be produced!"></td>
 		</tr>
 		<tr><td class="label">Sum:</td>
 		    <td><div id="sum">Nothing to show yet</div></td>

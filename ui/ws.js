@@ -11,12 +11,13 @@ function initPage() {
 		var etime = $('#etime');
 		var primes = $('#primes');
 		var mess = $('#mess');
-		var list = $('#list').prop('checked');
+		var lst = $('#lst').prop('checked');
 		var n = $('#n').val();
+		var nr = $('#nr').val();
 		
 		sum.html(wait_mess);		
 		etime.html(wait_mess);
-		if (list) {
+		if (lst) {
 			primes.html(wait_mess);
 		} else {
 			primes.html("");
@@ -26,7 +27,7 @@ function initPage() {
 			url: '/sum',
 			method: 'post',
 			data: 
-				'{"n": '+n+', "list": '+list+'}',
+				'{"n": '+n+', "lst": '+lst+', "nr": '+nr+'}',
 			dataType: 'json',
 			contentType: 'application/json',
 			success: function(data) {

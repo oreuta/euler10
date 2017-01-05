@@ -12,13 +12,19 @@ type loggingMiddleware struct {
 	next   PrimeService
 }
 
-func (mw loggingMiddleware) PrimeSum(n uint64, list bool) (sum uint64, primes []uint64, err error) {
+func (mw loggingMiddleware) PrimeSum(n uint64, lst bool, nr uint8) (sum uint64, primes []uint64, err error) {
 	var plen int
 	var p string
 
 	defer func(begin time.Time) {
+		var t rune
+		if lst {
+			t = 't'
+		} else {
+			t = 'f'
+		}
 		_ = mw.logger.Log(
-			"input", fmt.Sprintf("%v(%t)", n, list),
+			"input", fmt.Sprintf("%v[%c]#%v", n, t, nr),
 			"sum", sum,
 			"err", err,
 			"took", time.Since(begin).String(),
@@ -26,7 +32,7 @@ func (mw loggingMiddleware) PrimeSum(n uint64, list bool) (sum uint64, primes []
 		)
 	}(time.Now())
 
-	sum, primes, err = mw.next.PrimeSum(n, list)
+	sum, primes, err = mw.next.PrimeSum(n, lst, nr)
 
 	// nice output for primes
 	plen = len(primes)

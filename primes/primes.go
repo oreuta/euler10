@@ -11,36 +11,28 @@ import (
 	"math"
 )
 
-type Res struct {
-	Sum    uint64
-	Primes []uint64
-}
-
-type Params struct {
-	N    uint64
-	List bool
-	Nrut uint8
-}
-
-// Default implementation
-var PrimeSum func(uint64, bool) (uint64, []uint64, error) = Erat3
+// Default implementation for Summation of primes.
+// It gets n - an upper limit for primes in the sum,
+// lst - if list of primes has to be generated,
+// nr - number of goroutines used.
+var PrimeSum func(n uint64, lst bool, nr uint8) (sum uint64, primes []uint64, err error) = Erat3
 
 // Parallel sum calculation
-func Erat3(n uint64, list bool) (uint64, []uint64, error) {
+func Erat3(n uint64, lst bool, nr uint8) (uint64, []uint64, error) {
 	if n < 2 {
-		return 0, []uint64{}, ErrBadRange
+		return 0, []uint64{}, ErrEmptyRange
 	}
 
 	var i uint64 = 2        // first prime
 	var sum uint64 = 0      // sum of primes
 	var pnum uint64 = 0     // number of primes
-	s := make([]bool, n)    // Sieve: false-prime true-composite
+	s := make([]bool, n+1)  // Sieve: false-prime true-composite
 	s[0], s[1] = true, true // 0 and 1 are composite
 
 	kmax := uint64(math.Sqrt(float64(n)))
 
 	for i <= kmax { // sieve main loop
-		for j := i * i; j < n; j += i {
+		for j := i * i; j <= n; j += i {
 			s[j] = true
 		}
 		i++
@@ -49,19 +41,23 @@ func Erat3(n uint64, list bool) (uint64, []uint64, error) {
 		}
 	}
 
-	var rnum uint64 = 10 // Max # of goroutins
+	var rnum uint64 // Max # of goroutins
+	if nr == 0 {
+		rnum = 3 // default for now...
+	}
 	var sums chan uint64 = make(chan uint64, rnum)
 	var pnums chan uint64 = make(chan uint64, rnum)
-	var ran = n / uint64(rnum)
+	var ran = (n + 1) / uint64(rnum)
 	var imin, imax uint64
 	for r := uint64(1); r <= rnum; r++ {
 		imin, imax = imax, r*ran
 		if r == rnum {
-			imax = n
+			imax = n + 1
 		}
-		go func(s []bool) {
+
+		go func(s []bool, imin uint64, imax uint64) {
 			var psum, ppnum, k uint64
-			for k = 0; k < uint64(len(s)); k++ {
+			for k = imin; k < imax; k++ {
 				if !s[k] {
 					psum += k
 					ppnum++
@@ -69,7 +65,7 @@ func Erat3(n uint64, list bool) (uint64, []uint64, error) {
 			}
 			sums <- psum
 			pnums <- ppnum
-		}(s[imin:imax])
+		}(s, imin, imax)
 	}
 
 	for r := uint64(1); r <= rnum; r++ {
@@ -77,7 +73,8 @@ func Erat3(n uint64, list bool) (uint64, []uint64, error) {
 		pnum += <-pnums
 	}
 
-	if list {
+	// OUT OF RANGE ERROR here for n = 22 !!!!!
+	if lst {
 		return sum, make_prime_list(s, pnum), nil
 	}
 
@@ -85,4 +82,5 @@ func Erat3(n uint64, list bool) (uint64, []uint64, error) {
 
 }
 
-var ErrBadRange error = errors.New("No primes in the range")
+var ErrEmptyRange error = errors.New("No primes in the range")
+var ErrBadRange error = errors.New("Bad range")
