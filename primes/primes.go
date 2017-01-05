@@ -73,9 +73,8 @@ func Erat3(n uint64, lst bool, nr uint8) (uint64, []uint64, error) {
 		pnum += <-pnums
 	}
 
-	// OUT OF RANGE ERROR here for n = 22 !!!!!
 	if lst {
-		return sum, make_prime_list(s, pnum), nil
+		return sum, makePrimeLst(s, pnum), nil
 	}
 
 	return sum, nil, nil

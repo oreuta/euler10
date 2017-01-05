@@ -8,9 +8,9 @@ import (
 
 // https://habrahabr.ru/post/133037/
 // 142913828922 - 19.0011ms
-func Erat2(n uint64, list bool) (uint64, []uint64, error) {
+func Erat2(n uint64, lst bool, nr uint8) (uint64, []uint64, error) {
 	if n < 2 {
-		return 0, []uint64{}, ErrBadRange
+		return 0, []uint64{}, ErrEmptyRange
 	}
 
 	var i uint64 = 2        // first prime
@@ -38,8 +38,8 @@ func Erat2(n uint64, list bool) (uint64, []uint64, error) {
 		}
 	}
 
-	if list {
-		return sum, make_prime_list(s, pnum), nil
+	if lst {
+		return sum, makePrimeLst(s, pnum), nil
 	}
 
 	return sum, nil, nil
@@ -47,7 +47,11 @@ func Erat2(n uint64, list bool) (uint64, []uint64, error) {
 }
 
 //Parallel version 1 (fixed g-rout number)
-func Erat1(n uint64, list bool) (uint64, []uint64, error) {
+func Erat1(n uint64, lst bool, nr uint8) (uint64, []uint64, error) {
+	if n < 2 {
+		return 0, []uint64{}, ErrEmptyRange
+	}
+
 	var i uint64 = 0        // first prime
 	var sum uint64 = 0      // sum of primes
 	var pnum uint64 = 0     // number of primes
@@ -93,8 +97,8 @@ func Erat1(n uint64, list bool) (uint64, []uint64, error) {
 	}
 
 	// prepare list of primes if needed
-	if list {
-		return sum, make_prime_list(s, pnum), nil
+	if lst {
+		return sum, makePrimeLst(s, pnum), nil
 	}
 
 	return sum, nil, nil
@@ -109,7 +113,11 @@ func rmcomp(s []bool, i int, c chan int) {
 }
 
 //Sieve of Eratosthenes - The Simplest Algorithm
-func Erat0(n uint64, list bool) (uint64, []uint64, error) {
+func Erat0(n uint64, lst bool, nr uint8) (uint64, []uint64, error) {
+	if n < 2 {
+		return 0, []uint64{}, ErrEmptyRange
+	}
+
 	var i uint64 = 2        // first prime
 	var sum uint64 = i      // sum of primes
 	var pnum uint64 = 1     // number of primes
@@ -134,15 +142,15 @@ func Erat0(n uint64, list bool) (uint64, []uint64, error) {
 	}
 
 	// prepare list of primes if needed
-	if list {
-		return sum, make_prime_list(s, pnum), nil
+	if lst {
+		return sum, makePrimeLst(s, pnum), nil
 	}
 
 	return sum, nil, nil
 
 }
 
-func make_prime_list(s []bool, pnum uint64) []uint64 {
+func makePrimeLst(s []bool, pnum uint64) []uint64 {
 	// Pick up primes from []bool to []uint64
 	p := make([]uint64, pnum)
 	for i, j := uint64(0), uint64(0); i < uint64(len(s)); i++ {
