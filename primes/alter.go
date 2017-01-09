@@ -97,6 +97,9 @@ func Erat1(n int64, lst bool, nr int64) (int64, []int64, error) {
 		}
 		pnum++
 		sum += i
+		if sum <= 0 {
+			return 0, nil, ErrOverflow
+		}
 	}
 
 	// prepare list of primes if needed
@@ -142,6 +145,9 @@ func Erat0(n int64, lst bool, nr int64) (int64, []int64, error) {
 		}
 		pnum++
 		sum += i
+		if sum <= 0 {
+			return 0, nil, ErrOverflow
+		}
 	}
 
 	// prepare list of primes if needed
