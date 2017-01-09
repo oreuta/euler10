@@ -79,7 +79,7 @@ func Erat3(n int64, lst bool, nr int64) (int64, []int64, error) {
 	for r := int64(1); r <= rnum; r++ {
 		sum += <-sums
 		if sum <= 0 {
-			return 0, []int64{}, ErrBadRange
+			return 0, []int64{}, ErrOverflow
 		}
 		pnum += <-pnums
 	}
