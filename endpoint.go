@@ -15,7 +15,7 @@ func makePrimeSumEndpoint(ps PrimeService) endpoint.Endpoint {
 		start := time.Now()
 		sum, primes, err := ps.PrimeSum(req.N, req.Lst, req.Nr)
 		if err != nil {
-			return sumError{"ERROR: " + err.Error()}, nil
+			return sumError{err.Error()}, nil
 		}
 		etime := time.Since(start)
 		return sumResponse{
@@ -26,15 +26,15 @@ func makePrimeSumEndpoint(ps PrimeService) endpoint.Endpoint {
 }
 
 type sumRequest struct {
-	N   uint64 `json:"n"`
-	Lst bool   `json:"lst"`
-	Nr  uint64 `json:"nr"`
+	N   int64 `json:"n"`
+	Lst bool  `json:"lst"`
+	Nr  int64 `json:"nr"`
 }
 
 type sumResponse struct {
-	Sum    uint64   `json:"sum"`
-	ETime  string   `json:"etime"`
-	Primes []uint64 `json:"primes,omitempty"`
+	Sum    int64   `json:"sum"`
+	ETime  string  `json:"etime"`
+	Primes []int64 `json:"primes,omitempty"`
 }
 
 type sumError struct {
