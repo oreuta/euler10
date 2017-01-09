@@ -20,11 +20,8 @@ var PrimeSum func(n int64, lst bool, nr int64) (sum int64, primes []int64, err e
 
 // Parallel sum calculation
 func Erat3(n int64, lst bool, nr int64) (int64, []int64, error) {
-	if n < 0 {
-		return 0, nil, ErrBadRange
-	}
-	if n < 2 {
-		return 0, nil, ErrEmptyRange
+	if err := checkLimit(n); err != nil {
+		return 0, nil, err
 	}
 
 	var i int64 = 2         // first prime
@@ -116,3 +113,13 @@ var (
 	ErrBadRange   error = errors.New("Bad range")
 	ErrOverflow   error = errors.New("Overflow occurred")
 )
+
+func checkLimit(n int64) error {
+	if n < 0 {
+		return ErrBadRange
+	}
+	if n < 2 {
+		return ErrEmptyRange
+	}
+	return nil
+}

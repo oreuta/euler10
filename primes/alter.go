@@ -9,13 +9,13 @@ import (
 // https://habrahabr.ru/post/133037/
 // 142913828922 - 19.0011ms
 func Erat2(n int64, lst bool, nr int64) (int64, []int64, error) {
-	if n < 2 {
-		return 0, []int64{}, ErrEmptyRange
+	if err := checkLimit(n); err != nil {
+		return 0, nil, err
 	}
 
-	var i int64 = 2        // first prime
-	var sum int64 = 0      // sum of primes
-	var pnum int64 = 0     // number of primes
+	var i int64 = 2         // first prime
+	var sum int64 = 0       // sum of primes
+	var pnum int64 = 0      // number of primes
 	s := make([]bool, n)    // Sieve: false-prime true-composite
 	s[0], s[1] = true, true // 0 and 1 are composite
 
@@ -34,6 +34,9 @@ func Erat2(n int64, lst bool, nr int64) (int64, []int64, error) {
 	for k := int64(2); k < n; k++ {
 		if !s[k] {
 			sum += k
+			if sum <= 0 {
+				return 0, nil, ErrOverflow
+			}
 			pnum++
 		}
 	}
@@ -48,13 +51,13 @@ func Erat2(n int64, lst bool, nr int64) (int64, []int64, error) {
 
 //Parallel version 1 (fixed g-rout number)
 func Erat1(n int64, lst bool, nr int64) (int64, []int64, error) {
-	if n < 2 {
-		return 0, []int64{}, ErrEmptyRange
+	if err := checkLimit(n); err != nil {
+		return 0, nil, err
 	}
 
-	var i int64 = 0        // first prime
-	var sum int64 = 0      // sum of primes
-	var pnum int64 = 0     // number of primes
+	var i int64 = 0         // first prime
+	var sum int64 = 0       // sum of primes
+	var pnum int64 = 0      // number of primes
 	s := make([]bool, n)    // Sieve: false-prime true-composite
 	s[0], s[1] = true, true // 0 and 1 are composite
 
@@ -114,13 +117,13 @@ func rmcomp(s []bool, i int, c chan int) {
 
 //Sieve of Eratosthenes - The Simplest Algorithm
 func Erat0(n int64, lst bool, nr int64) (int64, []int64, error) {
-	if n < 2 {
-		return 0, []int64{}, ErrEmptyRange
+	if err := checkLimit(n); err != nil {
+		return 0, nil, err
 	}
 
-	var i int64 = 2        // first prime
-	var sum int64 = i      // sum of primes
-	var pnum int64 = 1     // number of primes
+	var i int64 = 2         // first prime
+	var sum int64 = i       // sum of primes
+	var pnum int64 = 1      // number of primes
 	s := make([]bool, n)    // Sieve: false-prime true-composite
 	s[0], s[1] = true, true // 0 and 1 are composite
 
