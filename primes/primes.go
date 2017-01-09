@@ -21,10 +21,10 @@ var PrimeSum func(n int64, lst bool, nr int64) (sum int64, primes []int64, err e
 // Parallel sum calculation
 func Erat3(n int64, lst bool, nr int64) (int64, []int64, error) {
 	if n < 0 {
-		return 0, []int64{}, ErrBadRange
+		return 0, nil, ErrBadRange
 	}
 	if n < 2 {
-		return 0, []int64{}, ErrEmptyRange
+		return 0, nil, ErrEmptyRange
 	}
 
 	var i int64 = 2         // first prime
@@ -52,8 +52,10 @@ func Erat3(n int64, lst bool, nr int64) (int64, []int64, error) {
 		rnum = nr // user defined
 	}
 
-	var sums chan int64 = make(chan int64, rnum)
-	var pnums chan int64 = make(chan int64, rnum)
+	sums := make(chan int64, rnum)
+	pnums := make(chan int64, rnum)
+	overflow := make(chan struct{})
+	die := make(chan struct{})
 	var ran = (n + 1) / rnum
 	var imin, imax int64
 
@@ -63,25 +65,42 @@ func Erat3(n int64, lst bool, nr int64) (int64, []int64, error) {
 			imax = n + 1
 		}
 
-		go func(s []bool, imin int64, imax int64) {
+		go func(s []bool, imin int64, imax int64, overflow chan struct{}, die chan struct{}) {
 			var psum, ppnum, k int64
 			for k = imin; k < imax; k++ {
-				if !s[k] {
-					psum += k
-					ppnum++
+				select {
+				case <-die:
+					return
+				default:
+					if !s[k] {
+						psum += k
+						if psum <= 0 {
+							overflow <- struct{}{}
+							return
+						}
+						ppnum++
+					}
 				}
+
 			}
 			sums <- psum
 			pnums <- ppnum
-		}(s, imin, imax)
+		}(s, imin, imax, overflow, die)
 	}
 
 	for r := int64(1); r <= rnum; r++ {
-		sum += <-sums
-		if sum <= 0 {
-			return 0, []int64{}, ErrOverflow
+		select {
+		case <-overflow:
+			die <- struct{}{}
+			return 0, nil, ErrOverflow
+		default:
+			sum += <-sums
+			if sum <= 0 {
+				die <- struct{}{}
+				return 0, nil, ErrOverflow
+			}
+			pnum += <-pnums
 		}
-		pnum += <-pnums
 	}
 
 	if lst {
