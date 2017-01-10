@@ -52,6 +52,14 @@ func TestEmptyRangeErrorFor1(t *testing.T) {
 	checkForError(t, 1, ErrEmptyRange)
 }
 
+func TestBadRangeErrorForMinus1(t *testing.T) {
+	checkForError(t, -1, ErrBadRange)
+}
+
+func TestBadRangeErrorForMinus10(t *testing.T) {
+	checkForError(t, -10, ErrBadRange)
+}
+
 func checkForError(t *testing.T, n int64, expErr error) {
 	_, _, actErr := PrimeSum(n, true, 0)
 	if actErr != expErr {
