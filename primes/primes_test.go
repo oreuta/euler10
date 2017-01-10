@@ -45,17 +45,17 @@ func TestPrimeSumAndListFor10(t *testing.T) {
 }
 
 func TestEmptyRangeErrorFor0(t *testing.T) {
-	emptyRangeErrorCheck(t, 0)
+	checkForError(t, 0, ErrEmptyRange)
 }
 
 func TestEmptyRangeErrorFor1(t *testing.T) {
-	emptyRangeErrorCheck(t, 1)
+	checkForError(t, 1, ErrEmptyRange)
 }
 
-func emptyRangeErrorCheck(t *testing.T, n int64) {
-	_, _, err := PrimeSum(n, true, 0)
-	if err != ErrEmptyRange {
-		t.Errorf("For n=%v Rrror must be %v but is %v", n, ErrEmptyRange, err)
+func checkForError(t *testing.T, n int64, expErr error) {
+	_, _, actErr := PrimeSum(n, true, 0)
+	if actErr != expErr {
+		t.Errorf("For n=%v Rrror must be %v but is %v", n, expErr, actErr)
 	}
 }
 
