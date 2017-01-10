@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"os"
 
@@ -14,9 +13,6 @@ import (
 )
 
 func main() {
-	fmt.Printf(">>> %v\n", int64(3)/int64(4))
-	return
-
 	port := os.Getenv("PORT") // for heroku
 	if port == "" {
 		port = "8080"

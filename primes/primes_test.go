@@ -18,6 +18,7 @@ func TestPrimeSumForValidN(t *testing.T) {
 		{5, 10},
 		{6, 10},
 		{100, 1060},
+		{1000, 76127},
 	}
 
 	for _, exp := range data {
