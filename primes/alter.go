@@ -50,6 +50,7 @@ func Erat2(n int64, lst bool, nr int64) (int64, []int64, error) {
 }
 
 //Parallel version 1 (fixed g-rout number)
+//It works for n >= 13 only!!!!
 func Erat1(n int64, lst bool, nr int64) (int64, []int64, error) {
 	if err := checkLimit(n); err != nil {
 		return 0, nil, err
@@ -61,7 +62,9 @@ func Erat1(n int64, lst bool, nr int64) (int64, []int64, error) {
 	s := make([]bool, n)    // Sieve: false-prime true-composite
 	s[0], s[1] = true, true // 0 and 1 are composite
 
-	ch := make(chan int, 4)
+	ch := make(chan int, 6)
+	sum = 2 + 3 + 5 + 7 + 11 + 13
+	pnum = 6
 
 	go rmcomp(s, 2, ch)
 	go rmcomp(s, 3, ch)
@@ -69,9 +72,6 @@ func Erat1(n int64, lst bool, nr int64) (int64, []int64, error) {
 	go rmcomp(s, 7, ch)
 	go rmcomp(s, 11, ch)
 	go rmcomp(s, 13, ch)
-
-	sum = 2 + 3 + 5 + 7 + 11 + 13
-	pnum = 6
 
 	<-ch
 	<-ch

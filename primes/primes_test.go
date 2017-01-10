@@ -4,14 +4,27 @@ import (
 	"testing"
 )
 
-func TestPrimeSumFor2000000(t *testing.T) {
+func TestPrimeSumForValidN(t *testing.T) {
 	var actSum int64
-	var expSum int64 = 142913828922
-	var n int64 = 2000000
+	type dataPoint struct {
+		N   int64
+		Sum int64
+	}
+	var data []dataPoint = []dataPoint{
+		{2000000, 142913828922},
+		{2, 2},
+		{3, 5},
+		{4, 5},
+		{5, 10},
+		{6, 10},
+		{100, 1060},
+	}
 
-	actSum, _, _ = PrimeSum(n, false, 0)
-	if actSum != expSum {
-		t.Errorf("Sum must be %v but is %v", expSum, actSum)
+	for _, exp := range data {
+		actSum, _, _ = PrimeSum(exp.N, false, 0)
+		if actSum != exp.Sum {
+			t.Errorf("For n=%v the sum must be %v but is %v", exp.N, exp.Sum, actSum)
+		}
 	}
 }
 
@@ -28,6 +41,21 @@ func TestPrimeSumAndListFor10(t *testing.T) {
 	}
 	if !isEquals(actList, expList) {
 		t.Errorf("List must be %v but is %v", expList, actList)
+	}
+}
+
+func TestEmptyRangeErrorFor0(t *testing.T) {
+	emptyRangeErrorCheck(t, 0)
+}
+
+func TestEmptyRangeErrorFor1(t *testing.T) {
+	emptyRangeErrorCheck(t, 1)
+}
+
+func emptyRangeErrorCheck(t *testing.T, n int64) {
+	_, _, err := PrimeSum(n, true, 0)
+	if err != ErrEmptyRange {
+		t.Errorf("For n=%v Rrror must be %v but is %v", n, ErrEmptyRange, err)
 	}
 }
 

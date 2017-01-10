@@ -49,12 +49,17 @@ func Erat3(n int64, lst bool, nr int64) (int64, []int64, error) {
 		rnum = nr // user defined
 	}
 
+	var ran = (n + 1) / rnum // numbers per each routine for processing
+	if ran < rnum {          // less then 1 number per 1 routine
+		rnum = 1 // in this case 1 routine is enough
+	}
+
 	sums := make(chan int64, rnum)
 	pnums := make(chan int64, rnum)
 	overflow := make(chan struct{})
 	die := make(chan struct{})
-	var ran = (n + 1) / rnum
-	var imin, imax int64
+
+	var imin, imax int64 // range for each routine
 
 	for r := int64(1); r <= rnum; r++ {
 		imin, imax = imax, r*ran
