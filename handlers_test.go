@@ -35,7 +35,7 @@ func TestPrimeServiceHandler(t *testing.T) {
 
 	var logBuf bytes.Buffer
 	logger := log.NewLogfmtLogger(&logBuf)
-	sh := buildServiceHandler(logger)
+	sh := buildServiceHandler(logger, true)
 	url := "GET /sum HTTP/1.0\r\n\r\n"
 
 	for _, d := range data {
