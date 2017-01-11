@@ -31,6 +31,19 @@ func TestPrimeServiceHandler(t *testing.T) {
 			`"sum":17`, `input=10[f]#0 sum=17 err=null`},
 		{`{"n": 100, "lst": false, "nr": 0}`,
 			`"sum":1060`, `input=100[f]#0 sum=1060 err=null`},
+		{`{"n": -1, "lst": false, "nr": 0}`,
+			`"error":"Bad range"`, `input=-1[f]#0 sum=0 err="Bad range"`},
+		{`{"n": 1, "lst": false, "nr": 0}`,
+			`"error":"No primes in the range"`, `input=1[f]#0 sum=0 err="No primes in the range"`},
+		{`{"n": 2, "lst": true, "nr": 0}`,
+			``, `primes="#1 [2]`},
+		{`{"n": 7, "lst": true, "nr": 0}`,
+			`"primes":[2,3,5,7]`, `primes="#4 [2 3 5 7]"`},
+		{`{"n": 20, "lst": true, "nr": 0}`,
+			`"primes":[2,3,5,7,11,13,17,19]`, `primes="#8 [2 3 5 7 11...]"`},
+
+		{`bad request`,
+			`invalid character`, ``},
 	}
 
 	var logBuf bytes.Buffer

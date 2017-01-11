@@ -158,15 +158,3 @@ func Erat0(n int64, lst bool, nr int64) (int64, []int64, error) {
 	return sum, nil, nil
 
 }
-
-func makePrimeLst(s []bool, pnum int64) []int64 {
-	// Pick up primes from []bool to []uint64
-	p := make([]int64, pnum)
-	for i, j := int64(0), int64(0); i < int64(len(s)); i++ {
-		if !s[i] {
-			p[j] = i
-			j++
-		}
-	}
-	return p
-}
