@@ -37,7 +37,9 @@ func buildServiceHandler(logger log.Logger, metr bool) http.Handler {
 	ctx := context.Background()
 	var svc PrimeService
 	svc = primeService{}
-	svc = loggingMiddleware{logger, svc}
+	if logger != nil {
+		svc = loggingMiddleware{logger, svc}
+	}
 
 	if metr {
 		fieldKeys := []string{"method", "error"}

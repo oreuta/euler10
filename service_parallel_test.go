@@ -9,15 +9,10 @@ import (
 	"strings"
 	"sync"
 	"testing"
-
-	"github.com/go-kit/kit/log"
 )
 
-// Skipped: client.Do(req) - problem
 func TestPrimeService_Parallel(t *testing.T) {
-	var logBuf bytes.Buffer
-	logger := log.NewLogfmtLogger(&logBuf)
-	sh := buildServiceHandler(logger, false)
+	sh := buildServiceHandler(nil, false)
 	ts := httptest.NewServer(http.Handler(sh))
 	defer ts.Close()
 	url := fmt.Sprintf("%s/sum", ts.URL)
