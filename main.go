@@ -17,10 +17,24 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
-
-	ctx := context.Background()
 	logger := log.NewLogfmtLogger(os.Stderr)
 
+	rootHandler := buildRootHandler()
+	serviceHanlder := buildServiceHandler(logger)
+	http.Handle("/", rootHandler)
+	http.Handle("/sum", serviceHanlder)
+	http.Handle("/metrics", stdprometheus.Handler())
+
+	logger.Log("msg", "HTTP", "addr", ":"+port)
+	logger.Log("err", http.ListenAndServe(":"+port, nil))
+}
+
+func buildRootHandler() http.Handler {
+	return http.FileServer(http.Dir("ui"))
+}
+
+func buildServiceHandler(logger log.Logger) http.Handler {
+	ctx := context.Background()
 	fieldKeys := []string{"method", "error"}
 	requestCount := kitprometheus.NewCounterFrom(stdprometheus.CounterOpts{
 		Namespace: "euler10",
@@ -46,12 +60,5 @@ func main() {
 		decodePrimeSumRequest,
 		encodeResponse,
 	)
-
-	fs := http.FileServer(http.Dir("ui"))
-	http.Handle("/", fs)
-	http.Handle("/sum", primeSumHandler)
-	http.Handle("/metrics", stdprometheus.Handler())
-
-	logger.Log("msg", "HTTP", "addr", ":"+port)
-	logger.Log("err", http.ListenAndServe(":"+port, nil))
+	return primeSumHandler
 }

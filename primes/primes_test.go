@@ -5,12 +5,10 @@ import (
 )
 
 func TestPrimeSumForValidN(t *testing.T) {
-	var actSum int64
-	type dataPoint struct {
-		N   int64
-		Sum int64
-	}
-	var data []dataPoint = []dataPoint{
+	var sum int64
+	data := []struct {
+		n, sum int64
+	}{
 		{2000000, 142913828922},
 		{2, 2},
 		{3, 5},
@@ -22,9 +20,9 @@ func TestPrimeSumForValidN(t *testing.T) {
 	}
 
 	for _, exp := range data {
-		actSum, _, _ = PrimeSum(exp.N, false, 0)
-		if actSum != exp.Sum {
-			t.Errorf("For n=%v the sum must be %v but is %v", exp.N, exp.Sum, actSum)
+		sum, _, _ = PrimeSum(exp.n, false, 0)
+		if sum != exp.sum {
+			t.Errorf("For n=%v got %v want %v", exp.n, sum, exp.sum)
 		}
 	}
 }
