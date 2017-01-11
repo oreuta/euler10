@@ -9,10 +9,13 @@ import (
 	"strings"
 	"sync"
 	"testing"
+
+	"github.com/go-kit/kit/log"
 )
 
 func TestPrimeService_Parallel(t *testing.T) {
-	sh := buildServiceHandler(nil, false)
+	logger := log.NewLogfmtLogger(ioutil.Discard)
+	sh := buildServiceHandler(logger, false)
 	ts := httptest.NewServer(http.Handler(sh))
 	defer ts.Close()
 	url := fmt.Sprintf("%s/sum", ts.URL)
@@ -21,7 +24,7 @@ func TestPrimeService_Parallel(t *testing.T) {
 	want := `"sum":2`
 
 	var wg sync.WaitGroup
-	for i := 0; i < 2; i++ {
+	for i := 0; i < 5; i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
