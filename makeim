@@ -1,0 +1,4 @@
+IMAGE='oreuta/euler10'
+docker rmi $IMAGE
+docker build -t $IMAGE .
+

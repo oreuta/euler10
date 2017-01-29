@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"net/http"
 	"os"
 
@@ -13,24 +14,33 @@ import (
 )
 
 func main() {
-	port := os.Getenv("PORT") // for heroku
+	var portptr = flag.String("port", "8080", "Port to listen.")
+	var dirptr = flag.String("dir", "ui", "Directory with static content.")
+
+	flag.Parse()
+
+	var port = *portptr
 	if port == "" {
-		port = "8080"
+		port = os.Getenv("PORT") // for heroku
 	}
+	var ip = ":" + port
+	var dir = *dirptr
+
 	logger := log.NewLogfmtLogger(os.Stderr)
 
-	rootHandler := buildRootHandler()
+	rootHandler := buildRootHandler(dir)
 	serviceHanlder := buildServiceHandler(logger, true)
 	http.Handle("/", rootHandler)
 	http.Handle("/sum", serviceHanlder)
 	http.Handle("/metrics", stdprometheus.Handler())
 
-	logger.Log("msg", "HTTP", "addr", ":"+port)
-	logger.Log("err", http.ListenAndServe(":"+port, nil))
+	logger.Log("msg", "HTTP", "addr", ip)
+	logger.Log("msg", "HTTP", "static content", dir)
+	logger.Log("err", http.ListenAndServe(ip, nil))
 }
 
-func buildRootHandler() http.Handler {
-	return http.FileServer(http.Dir("ui"))
+func buildRootHandler(dir string) http.Handler {
+	return http.FileServer(http.Dir(dir))
 }
 
 func buildServiceHandler(logger log.Logger, metr bool) http.Handler {
